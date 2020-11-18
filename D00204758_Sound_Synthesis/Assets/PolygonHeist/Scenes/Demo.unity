@@ -6145,8 +6145,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be41226ac34b7ed4b864887da22317ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkingSpeed: 7.5
-  runningSpeed: 11.5
+  walkingSpeed: 5
+  runningSpeed: 5
   jumpSpeed: 8
   gravity: 20
   playerCamera: {fileID: 724024292}
@@ -6312,6 +6312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   csoundUnity: {fileID: 0}
+  startWalk: 0
 --- !u!4 &228024572 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 490714, guid: 4fda005215cb0714b95002638112c818,

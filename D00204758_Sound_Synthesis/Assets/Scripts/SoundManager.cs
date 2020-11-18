@@ -5,7 +5,7 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public CsoundUnity csoundUnity = null;
-
+    public bool startWalk = false;
     private void Awake()
     {
         csoundUnity = GetComponent<CsoundUnity>();
@@ -21,10 +21,15 @@ public class SoundManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.W) && startWalk == false)
         {
-            print("Hello");
-            csoundUnity.setChannel("StartWalk", 1);
+            startWalk = true;
+            csoundUnity.setChannel("StartWalk", Random.Range(0,100));
+        }
+        else if(Input.GetKeyUp(KeyCode.W) && startWalk == true)
+        {
+            startWalk = false;
+            csoundUnity.setChannel("EndWalk", Random.Range(0, 100));
         }
     }
 }

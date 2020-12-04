@@ -6,6 +6,9 @@ public class SoundManager : MonoBehaviour
 {
     public CsoundUnity csoundUnity = null;
     public bool startWalk = false;
+    private float currentDampening;
+    private float currentRSize;
+    private float currentSendAmount;
     private void Awake()
     {
         csoundUnity = GetComponent<CsoundUnity>();
@@ -15,46 +18,78 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        //csoundUnity.setChannel("StartWalk",1);
+        currentRSize = 0.85f;
+        currentDampening = 0.5f;
+        currentSendAmount = 0.8f;
+        csoundUnity.setChannel("RVBSendAmount", currentSendAmount);
+        csoundUnity.setChannel("RVBDampening", currentDampening);
+        csoundUnity.setChannel("RVBRoomSize", currentRSize);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        string zone = other.tag;
+        if(zone == "Room")
+        {
+            print("OOP");
+            RoomCollider roomCollider = other.gameObject.GetComponent<RoomCollider>();
+            float size = roomCollider.roomSize;
+            float dampening = roomCollider.dampeningAmount;
+
+            if(size != currentRSize || dampening != currentDampening)
+            {
+                setReverbDampening(dampening);
+                setReverbRoomSize(size);
+                resetWalk();
+            }
+        }
     }
     private void OnCollisionEnter(Collision collision)
     {
         string collisionType = collision.gameObject.tag;
-        switch (collisionType)
+        if(collisionType == "floor")
         {
-            case "hardFloor":
-                //float hardness = collision.gameObject.GetComponent<>();
-                //setFloorHardNess();
-                break;
-            case "softFloor":
-                //setFloorHardness();
-                break;
-            case "roomCollider":
-                //Room collider will be responsible for size of 
-                //setRoomPopulation
-                //setRoomSize()
-                break;
-            default:
-                break;
+            FloorElement floorElement = collision.gameObject.GetComponent<FloorElement>();
+            float sendamount = floorElement.sendAmount;
+            if(currentSendAmount != sendamount)
+            {
+                setReverbSendAmount(sendamount);
+                resetWalk();
+            }
         }
     }
     
     //set the send amount
     private void setReverbSendAmount(float sendAmount)
     {
+        currentSendAmount = sendAmount;
         csoundUnity.setChannel("RVBSendAmount", sendAmount);
     }
 
     //set the dampening variable
     private void setReverbDampening(float dampening)
     {
-        csoundUnity.setChannel("RVBDampening", dampening);
+        if(dampening != currentDampening)
+        {
+            currentDampening = dampening;
+            csoundUnity.setChannel("RVBDampening", dampening);
+        }
     }
 
     //Set room size reverb for CSound must be between 0-1
     private void setReverbRoomSize(float size)
     {
-        csoundUnity.setChannel("RVBRoomSize", size);
+        if(size != currentRSize)
+        {
+            currentRSize = size;
+            csoundUnity.setChannel("RVBRoomSize", size);
+        }
+    }
+
+    private void resetWalk()
+    {
+        csoundUnity.setChannel("EndWalk", Random.Range(0, 100));
+        csoundUnity.setChannel("StartWalk", Random.Range(0, 100));
     }
     // Update is called once per frame
     void Update()

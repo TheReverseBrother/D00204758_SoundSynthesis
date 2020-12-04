@@ -34,16 +34,16 @@ instr 2
   kEnv         loopseg   1,0,0,1,0.003,1,0.0001,0,0.9969,0,0; amp. env.
   aSig         pinkish   kEnv              ; noise pulses
                outs      aSig, aSig        ; audio to outs
-  iRvbSendAmt  =         0.8               ; reverb send amount (0 - 1)
+  iRvbSendAmt chnget "RVBSendAmount"                ; reverb send amount (0 - 1)
   ;add some of the audio from this instrument to the global reverb send variable
   gaRvbSend    =         gaRvbSend + (aSig * iRvbSendAmt)
 endin
 
 instr 3 ; reverb - always on
-  kroomsize    init      0.85          ; room size (range 0 to 1)
-  kHFDamp      init      0.5           ; high freq. damping (range 0 to 1)
+  kroomsize    chnget "RVBRoomSize"           ; room size (range 0 to 1)
+  kHFDamp      chnget "RVBDampening"           ; high freq. damping (range 0 to 1)
   ; create reverberated version of input signal (note stereo input and output)
-  aRvbL,aRvbR  freeverb  gaRvbSend, gaRvbSend,kroomsize,kHFDamp
+  aRvbL,aRvbR  freeverb  gaRvbSend, gaRvbSend,kroomsize,kHFDamp 
                outs      aRvbL, aRvbR ; send audio to outputs
                clear     gaRvbSend    ; clear global audio variable
 endin

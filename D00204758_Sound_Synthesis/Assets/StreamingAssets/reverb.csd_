@@ -12,7 +12,7 @@ nchnls 	= 	2
 0dbfs	=	1 
 
  
-instr TEST
+instr HANDLER
     kStart chnget "StartWalk"
     kEnd chnget "EndWalk"
 
@@ -24,7 +24,7 @@ instr TEST
 
     if changed(kEnd)==1 then
         turnoff2 2, 0, 1
-        turnoff2 3, 0, 0
+        turnoff2 3, 0, 1
     endif
 endin
 
@@ -51,7 +51,7 @@ endin
 
 </CsInstruments>
 <CsScore>
-i"TEST" 0 [3600*12]
+i"HANDLER" 0 [3600*12]
 ;i 2 0 [3600*12]
 </CsScore>
 </CsoundSynthesizer>

@@ -10,4 +10,17 @@ public class FloorElement : MonoBehaviour
     {
         return this.sendAmount;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        string collisionType = other.gameObject.tag;
+        if (collisionType == "Player")
+        {
+            SoundManager.instance.updateSendAmount(sendAmount);
+        }
+    }
+
+    private void Update()
+    {
+        
+    }
 }

@@ -18,8 +18,8 @@ instr HANDLER
 
 
     if changed(kStart)==1 then
-        event "i", 2, 0, 300
-        event "i", 3, 0, 300
+        event "i", 2, 0, 3600
+        event "i", 3, 0, 3600
     endif
 
     if changed(kEnd)==1 then
@@ -31,12 +31,13 @@ endin
 gaRvbSend    init      0 
 
 instr 2 
-  kEnv         loopseg   1,0,0,1,0.003,1,0.0001,0,0.9969,0,0; amp. env.
-  aSig         pinkish   kEnv              ; noise pulses
-               outs      aSig, aSig        ; audio to outs
-  iRvbSendAmt chnget "RVBSendAmount"                ; reverb send amount (0 - 1)
-  ;add some of the audio from this instrument to the global reverb send variable
-  gaRvbSend    =         gaRvbSend + (aSig * iRvbSendAmt)
+  kEnv         loopseg   1,0,0,1,0.002,1,0.001,0,0.9970,0,0
+  aSig         pinkish   kEnv              ; Create Pulses
+               outs      aSig, aSig        
+  iRvbSendAmt chnget "RVBSendAmount"                ; Send Amount/Diffusion (0 - 1)
+  
+;Create global reverb from this source
+gaRvbSend    =         gaRvbSend + (aSig * iRvbSendAmt)
 endin
 
 instr 3 ; reverb - always on
@@ -52,6 +53,6 @@ endin
 </CsInstruments>
 <CsScore>
 i"HANDLER" 0 [3600*12]
-;i 2 0 [3600*12]
+
 </CsScore>
 </CsoundSynthesizer>

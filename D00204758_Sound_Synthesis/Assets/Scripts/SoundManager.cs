@@ -44,7 +44,7 @@ public class SoundManager : MonoBehaviour
                 print("Changing Rooms");
                 setReverbDampening(dampening);
                 setReverbRoomSize(size);
-                //resetWalk();
+                resetWalk();
             }
         }
     }
@@ -58,7 +58,7 @@ public class SoundManager : MonoBehaviour
             float sendamount = floorElement.sendAmount;
             if(currentSendAmount != sendamount)
             {
-                setReverbSendAmount(sendamount);
+                //setReverbSendAmount(sendamount);
                 //resetWalk();
             }
         }
@@ -69,7 +69,7 @@ public class SoundManager : MonoBehaviour
         {
             print("ChangingFloor");
             setReverbSendAmount(amount);
-            //resetWalk();
+            resetWalk();
         }
     }
     //set the send amount

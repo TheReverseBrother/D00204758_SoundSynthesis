@@ -19,40 +19,41 @@ instr HANDLER
 
     if changed(kStart)==1 then
         event "i", 2, 0, 3600
-        event "i", 3, 0, 3600
+        ;event "i", 3, 0, 3600
     endif
 
     if changed(kEnd)==1 then
         turnoff2 2, 0, 1
-        turnoff2 3, 0, 1
+        ;turnoff2 3, 0, 1
     endif
 endin
 
-gaRvbSend    init      0 
+gaGlobalSend    init      0 
 
 instr 2 
   kEnv         loopseg   1,0,0,1,0.002,1,0.001,0,0.9970,0,0
-  aSig         pinkish   kEnv              ; Create Pulses
+  aSig         pinkish   kEnv              ; Create Walk Sound
                outs      aSig, aSig        
-  iRvbSendAmt chnget "RVBSendAmount"                ; Send Amount/Diffusion (0 - 1)
+  iSendAmount chnget "RVBSendAmount"       ; Send Amount/Diffusion can only be between 0 - 1
   
-;Create global reverb from this source
-gaRvbSend    =         gaRvbSend + (aSig * iRvbSendAmt)
+;Create Global Send Amount for use in Reverb
+gaGlobalSend    =         gaGlobalSend + (aSig * iSendAmount)
 endin
 
 instr 3 ; reverb - always on
-  kroomsize    chnget "RVBRoomSize"           ; room size (range 0 to 1)
-  kHFDamp      chnget "RVBDampening"           ; high freq. damping (range 0 to 1)
-  ; create reverberated version of input signal (note stereo input and output)
-  aRvbL,aRvbR  freeverb  gaRvbSend, gaRvbSend,kroomsize,kHFDamp 
-               outs      aRvbL, aRvbR ; send audio to outputs
-               clear     gaRvbSend    ; clear global audio variable
+  kRsize          chnget "RVBRoomSize"                  ; room size can only be between 0 - 1
+  kDampening      chnget "RVBDampening"           ; damping can only be between 0 - 1
+  ; create reverb of walk sound
+  aLeft,aRight  freeverb  gaGlobalSend, gaGlobalSend,kRsize,kDampening 
+               outs      aLeft, aRight    ; send stereo
+               clear     gaGlobalSend     ; clear global audio variable used in more sounds
 endin
 
 
 </CsInstruments>
 <CsScore>
-i"HANDLER" 0 [3600*12]
+i"HANDLER" 0 [7200*12]
+i 3 0 [7200*12]
 
 </CsScore>
 </CsoundSynthesizer>

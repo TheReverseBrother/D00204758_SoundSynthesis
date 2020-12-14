@@ -6,10 +6,7 @@ public class FloorElement : MonoBehaviour
 {
     public float sendAmount = 0;
 
-    public float getSendAmount()
-    {
-        return this.sendAmount;
-    }
+    //When Player Enters trigger update the send amount
     private void OnTriggerEnter(Collider other)
     {
         string collisionType = other.gameObject.tag;
@@ -17,10 +14,5 @@ public class FloorElement : MonoBehaviour
         {
             SoundManager.instance.updateSendAmount(sendAmount);
         }
-    }
-
-    private void Update()
-    {
-        
     }
 }
